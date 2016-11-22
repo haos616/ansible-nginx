@@ -1,0 +1,22 @@
+- name: Add repo key nginx
+  apt_key: url="{{ nginx_repo_key }}"
+
+- name: Add deb repo nginx
+  apt_repository: repo="{{ nginx_repo_deb }}"
+
+- name: Add deb-src repo nginx
+  apt_repository: repo="{{ nginx_repo_deb_src }}"
+
+- name: Install nginx
+  apt: name=nginx
+
+- name: Creates directory {{ nginx_logs_dir }}
+  file: path="{{ nginx_logs_dir }}" owner="{{ user }}" group="{{ user }}" state=directory mode=755
+
+- name: install passlib
+  apt: name=python-passlib
+  when: nginx_auth_basic
+
+- name: Create htpasswd {{ nginx_htpasswd_file }}
+  htpasswd: path={{ nginx_htpasswd_file }} name={{ nginx_htpasswd_user }} password={{ nginx_htpasswd_password }} crypt_scheme=md5_crypt
+  when: nginx_auth_basic

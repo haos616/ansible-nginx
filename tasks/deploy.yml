@@ -1,0 +1,9 @@
+- name: Generate {{ nginx_proxy_pass_config_file }} nginx proxy_pass conf
+  template: src=proxy_pass.conf.j2 dest={{ nginx_proxy_pass_config_file }}
+  notify:
+    - restart nginx
+
+- name: Generate {{ nginx_server_name }} nginx conf
+  template: src=nginx.conf.j2 dest={{ nginx_config_file }}
+  notify:
+    - restart nginx
