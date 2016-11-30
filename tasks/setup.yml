@@ -1,3 +1,10 @@
+- assert:
+    that:
+     - "user is defined"
+
+- name: Install sudo
+  apt: name=sudo
+
 - name: Add repo key nginx
   apt_key: url="{{ nginx_repo_key }}"
 
@@ -20,3 +27,12 @@
 - name: Create htpasswd {{ nginx_htpasswd_file }}
   htpasswd: path={{ nginx_htpasswd_file }} name={{ nginx_htpasswd_user }} password={{ nginx_htpasswd_password }} crypt_scheme=md5_crypt
   when: nginx_auth_basic
+
+- name: Allow access to service nginx from {{ user }}
+  lineinfile:
+    dest: "{{ sudoers_file }}"
+    state: "present"
+    regexp: '^{{ user }} ALL=NOPASSWD: /usr/sbin/service nginx {{ item }}'
+    line: '{{ user }} ALL=NOPASSWD: /usr/sbin/service nginx {{ item }}'
+  with_items: "{{ nginx_service_allow_commands }}"
+  when: user != 'root'

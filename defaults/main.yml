@@ -2,6 +2,8 @@ nginx_repo_key: 'http://nginx.org/keys/nginx_signing.key'
 nginx_repo_deb: "deb http://nginx.org/packages/{{ ansible_distribution| lower }}/ {{ ansible_distribution_release }} nginx"
 nginx_repo_deb_src: "deb-src http://nginx.org/packages/{{ ansible_distribution| lower }}/ {{ ansible_distribution_release }} nginx"
 
+sudoers_file: "/etc/sudoers"
+
 nginx_server_name: localhost
 use_www: False
 nginx_listen: 80
@@ -11,7 +13,7 @@ nginx_config_file: '{{ project_configs_dir }}/nginx.conf'
 nginx_auth_basic: true
 nginx_htpasswd_file: '{{ project_configs_dir }}/htpasswd'
 nginx_htpasswd_user: '{{ user }}'
-nginx_htpasswd_password_dir: '{{ password_dir }}{{ project_state }}/htpasswd/{{ nginx_htpasswd_user }}'
+nginx_htpasswd_password_dir: '{{ password_dir }}{{ inventory_hostname }}/htpasswd/{{ nginx_htpasswd_user }}'
 nginx_htpasswd_password: "{{lookup('password', nginx_htpasswd_password_dir + ' length=' + password_length )}}"
 
 nginx_proxy_pass_config_file: '{{ project_configs_dir }}/proxy_pass.conf'
@@ -20,7 +22,7 @@ nginx_site_name: '{{ user }}'
 use_ipv6: false
 use_https: false
 use_gzip: false
-nginx_client_max_body_size: 100m
+nginx_client_max_body_size: 10m
 use_redirect: false
 use_phantomjs: true
 nginx_logs_dir: "{{ project_logs_dir }}/nginx"
@@ -33,3 +35,14 @@ phantomjs_log_error: "{{ phantomjs_logs_dir }}/phantomjs.error.log"
 
 nginx_ssl_certificate: "/etc/letsencrypt/live/{{ nginx_server_name }}/fullchain.pem"
 nginx_ssl_certificate_key: "/etc/letsencrypt/live/{{ nginx_server_name }}/privkey.pem"
+nginx_dhparam_file: "/etc/ssl/certs/dhparam.pem"
+
+nginx_service_allow_commands:
+  - start
+  - stop
+  - status
+  - restart
+  - reload
+  - force-reload
+  - upgrade
+  - configtest
