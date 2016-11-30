@@ -98,14 +98,6 @@ server {
         include {{ nginx_proxy_pass_config_file }};
     }
 
-    {% if use_phantomjs %}
-
-    set $phantomjs 0;
-    if ($args ~ _escaped_fragment_) {
-        set $phantomjs 1;
-    }
-    {% endif %}
-
     location /m/ {
         alias {{ project_media_dir }}/;
         expires 367d;
@@ -145,33 +137,6 @@ server {
         auth_basic off;
         {% endif %}
     }
-
-    {% if use_phantomjs %}
-
-    if ($phantomjs) {
-        rewrite ^ /phantomjs/$request_uri last;
-    }
-    {% endif %}
-
-    {% if use_phantomjs %}
-
-    if ($http_user_agent ~* "baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest|slackbot|vkShare|W3C_Validator") {
-        rewrite ^ /phantomjs/$request_uri last;
-    }
-    {% endif %}
-
-    {% if use_phantomjs %}
-
-    location /phantomjs {
-        error_log {{ phantomjs_log_error }};
-        access_log {{ phantomjs_log_access }};
-
-        proxy_pass http://localhost:8889/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header REMOTE_ADDR $remote_addr;
-    }
-    {% endif %}
 
     location = /index.html {
         add_header Cache-Control no-cache;

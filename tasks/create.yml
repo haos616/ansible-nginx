@@ -1,2 +1,6 @@
+- assert:
+    that:
+     - "user is defined"
+
 - name: Create link for nginx config
   file: src={{ nginx_config_file }} dest=/etc/nginx/conf.d/{{ nginx_site_name }}.conf state=link force=yes

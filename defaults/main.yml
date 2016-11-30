@@ -2,6 +2,8 @@ nginx_repo_key: 'http://nginx.org/keys/nginx_signing.key'
 nginx_repo_deb: "deb http://nginx.org/packages/{{ ansible_distribution| lower }}/ {{ ansible_distribution_release }} nginx"
 nginx_repo_deb_src: "deb-src http://nginx.org/packages/{{ ansible_distribution| lower }}/ {{ ansible_distribution_release }} nginx"
 
+sudoers_file: "/etc/sudoers"
+
 nginx_server_name: localhost
 use_www: False
 nginx_listen: 80
@@ -22,14 +24,10 @@ use_https: false
 use_gzip: false
 nginx_client_max_body_size: 100m
 use_redirect: false
-use_phantomjs: true
+
 nginx_logs_dir: "{{ project_logs_dir }}/nginx"
 nginx_log_access: "{{ nginx_logs_dir }}/access.log"
 nginx_log_error: "{{ nginx_logs_dir }}/error.log"
-
-phantomjs_logs_dir: "{{ nginx_logs_dir }}"
-phantomjs_log_access: "{{ phantomjs_logs_dir }}/phantomjs.access.log"
-phantomjs_log_error: "{{ phantomjs_logs_dir }}/phantomjs.error.log"
 
 nginx_ssl_certificate: "/etc/letsencrypt/live/{{ nginx_server_name }}/fullchain.pem"
 nginx_ssl_certificate_key: "/etc/letsencrypt/live/{{ nginx_server_name }}/privkey.pem"
