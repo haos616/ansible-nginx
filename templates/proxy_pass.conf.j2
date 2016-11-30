@@ -1,4 +1,4 @@
-proxy_pass http://{{ ramona_app_ip }}:{{ ramona_app_port }};
+proxy_pass http://{{ project_ip }}:{{ project_port }};
 proxy_set_header Host $host;
 proxy_set_header X-Real-IP $remote_addr;
 proxy_set_header REMOTE_ADDR $remote_addr;

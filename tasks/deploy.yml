@@ -1,7 +1,3 @@
-- assert:
-    that:
-     - "user is defined"
-
 - name: Generate {{ nginx_proxy_pass_config_file }} nginx proxy_pass conf
   template: src=proxy_pass.conf.j2 dest={{ nginx_proxy_pass_config_file }}
   notify:

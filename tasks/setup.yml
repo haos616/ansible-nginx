@@ -2,6 +2,9 @@
     that:
      - "user is defined"
 
+- name: Install sudo
+  apt: name=sudo
+
 - name: Add repo key nginx
   apt_key: url="{{ nginx_repo_key }}"
 
@@ -31,13 +34,5 @@
     state: "present"
     regexp: '^{{ user }} ALL=NOPASSWD: /usr/sbin/service nginx {{ item }}'
     line: '{{ user }} ALL=NOPASSWD: /usr/sbin/service nginx {{ item }}'
-  with_items:
-    - start
-    - stop
-    - status
-    - restart
-    - reload
-    - force-reload
-    - upgrade
-    - configtest
+  with_items: "{{ nginx_service_allow_commands }}"
   when: user != 'root'
